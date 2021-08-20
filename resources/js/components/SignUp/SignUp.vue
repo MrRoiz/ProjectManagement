@@ -45,8 +45,8 @@
             </v-card-text>
             <v-card-actions class='d-flex justify-end pa-4'>
                 
-                <router-link to='/' class='routerLink mr-3' :disabled="loading">
-                    <v-btn>Cancel</v-btn>
+                <router-link to='/' class='routerLink mr-3' :is="loading ? 'span' : 'router-link'">
+                    <v-btn :disabled="loading">Cancel</v-btn>
                 </router-link>
 
                 <v-btn @click='dispatchSignup' :disabled="loading">Register</v-btn>
@@ -57,7 +57,7 @@
 
 <script>
     import FullCenteredContent from '../Common/FullCenteredContent.vue'
-    import { mapActions } from 'vuex'
+    import { mapActions, mapMutations } from 'vuex'
 
     export default{
         components : {
@@ -95,15 +95,21 @@
         },
         methods : {
             ...mapActions(['signup']),
+            ...mapMutations(['showAlert']),
             async dispatchSignup(){
                 if(this.$refs.signUpForm.validate()){
                     this.loading = true
                     try{
-                        await this.signup(this.form)
+                        this.showAlert((await this.signup(this.form)).message)
+                        this.$router.push('/')
                     }catch(error){
-                        console.log(error)
+                        if(error.data){
+                            this.showAlert(Object.values(error.data)[0][0])
+                        }else{
+                            this.showAlert(error.message)
+                        }
                     }finally{
-                        // this.loading = false
+                        this.loading = false
                     }
                 }
             }
