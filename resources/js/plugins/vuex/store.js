@@ -3,8 +3,23 @@ import Vue from 'vue';
 
 Vue.use(Vuex);
 
-const Store = new Vuex.Store({
+export default new Vuex.Store({
+    state : {
 
+    },
+    mutations : {
+
+    },
+    actions : {
+        signup({ commit }, params){
+            axios.post('api/signup',params).then(res=>{
+                if(res.status == 201) Promise.resolve()
+                else Promise.reject()
+            }).catch(err=>{
+                Promise.reject()
+            });
+        }
+    }
 });
 
-export default Store;
+// export default Store;
