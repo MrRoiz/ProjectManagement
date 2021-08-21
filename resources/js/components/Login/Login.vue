@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import { mapActions, mapMutations } from 'vuex'
+    import { mapActions, mapMutations, mapState } from 'vuex'
     import FullCenteredContent from '../Common/FullCenteredContent.vue';
 
     export default{
@@ -63,6 +63,14 @@
                 ]
             }
         }),
+        computed: {
+            ...mapState({
+                token : state=>state.global.auth.token
+            })
+        },
+        mounted(){
+            if(this.token) this.$router.push('/dashboard');
+        },
         methods : {
             ...mapActions(['signin']),
             ...mapMutations(['showAlert']),
@@ -71,7 +79,7 @@
                     this.loading = true
                     try{
                         await this.signin(this.form)
-                        // this.$router.push('/')
+                        this.$router.push('/dashboard')
                     }catch(error){
                         if(error.data){
                             this.showAlert(Object.values(error.data)[0][0])

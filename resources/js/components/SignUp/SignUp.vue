@@ -57,7 +57,7 @@
 
 <script>
     import FullCenteredContent from '../Common/FullCenteredContent.vue'
-    import { mapActions, mapMutations } from 'vuex'
+    import { mapActions, mapMutations, mapState } from 'vuex'
 
     export default{
         components : {
@@ -89,9 +89,15 @@
             }
         }),
         computed : {
+            ...mapState({
+                token : state => state.global.auth.token
+            }),
             passwordConfirmationRule(){
                 return value => this.form.password == value || 'Password confirmation does not match with password field'
             }
+        },
+        mounted(){
+            if(this.token) this.$router.push('/dashboard')
         },
         methods : {
             ...mapActions(['signup']),

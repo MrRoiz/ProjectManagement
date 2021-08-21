@@ -15,6 +15,11 @@ const Store = new Vuex.Store({
 			}
         }
     },
+    getters : {
+        isAuthenticated(state){
+            return !!state.global.auth.token
+        }
+    },
     mutations : {
         mutateToken(state,token){
             localStorage.token = token
