@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Company;
-use App\Models\UserStory;
+use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Project extends Model
+class UserStory extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -16,11 +15,7 @@ class Project extends Model
      * Relationships
      */
 
-    public function userStories(){
-        return $this->hasMany(UserStory::class);
-    }
-
-    public function company(){
-        return $this->belongsTo(Company::class);
+    public function tickets(){
+        return $this->hasMany(Ticket::class);
     }
 }

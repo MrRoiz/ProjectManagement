@@ -90,7 +90,7 @@
                     route : '/dashboard/companies'
                 },
                 {
-                    icon : 'fa fa-industry',
+                    icon : 'fa fa-folder-open',
                     feature : 'Projects',
                     route : '/dashboard/projects'
                 }

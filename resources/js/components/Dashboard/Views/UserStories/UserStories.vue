@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Projects</h2>
+        <h2>{{title}}</h2>
         <v-divider class='mb-4'/>
 
         <v-data-table
@@ -10,7 +10,7 @@
             loading-text='Loading data'
         >
             <template v-slot:item.details="{ item }">
-                <router-link class='routerLink' :to="'/dashboard/projects/'+item.projectId+'/user-stories'">
+                <router-link class='routerLink' :to="'/dashboard/projects/'+$route.params.idProject+'/user-stories/'+item.storyId+'/tickets'">
                     <v-btn text><v-icon>fa fa-eye</v-icon></v-btn>
                 </router-link>
             </template>
@@ -21,12 +21,13 @@
 <script>
     export default {
         data : ()=>({
+            title : 'Loading...',
             loading : false,
             headers : [
                 {
-                    text    : 'Project',
+                    text    : 'Name',
                     sortable: true,
-                    value   : 'project'
+                    value   : 'name'
                 },
                 {
                     text    : 'Description',
@@ -34,9 +35,14 @@
                     value   : 'description'
                 },
                 {
-                    text    : 'Company',
+                    text    : 'Tickets',
                     sortable: true,
-                    value   : 'company'
+                    value   : 'tickets'
+                },
+                {
+                    text    : 'State',
+                    sortable: true,
+                    value   : 'state'
                 },
                 {
                     text    : 'Details',
@@ -50,16 +56,18 @@
             let self = this
             this.loading = true
 
-            axios.get('/api/project').then(res=>{
-                self.rows = res.data.data.map(project=>{
+            axios.get('/api/project/'+this.$route.params.idProject+'/userStory').then(res=>{
+                self.title = 'User Stories of project '+res.data.data.name
+                self.rows = res.data.data.user_stories.map(story=>{
                     return {
-                        projectId  : project.id,
-                        project    : project.name,
-                        company    : project.company.name,
-                        description: project.description,
-                        details    : null
+                        storyId : story.id,
+                        name : story.name,
+                        description : story.description,
+                        tickets : story.tickets.length,
+                        state : 'active',
+                        details : null,
                     }
-                });
+                })
             }).finally(()=>{
                 self.loading = false
             })
